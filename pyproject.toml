@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "exotransit"
+version = "0.1.0"
+description = "Exoplanet transit detection on Kepler light curves: BLS baseline vs 1D CNN"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    # numerics / tabular
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "pandas>=2.1",
+    "pyarrow>=14",
+    # astronomy: archives, light curves, BLS (astropy.timeseries.BoxLeastSquares)
+    "astropy>=6.0",
+    "astroquery>=0.4.7",
+    "lightkurve>=2.4",
+    # ML
+    "torch>=2.2",
+    "scikit-learn>=1.4",
+    # plumbing
+    "matplotlib>=3.8",
+    "pyyaml>=6.0",
+    "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+# gradient-boosted scalar-feature baseline (week 3)
+boost = ["xgboost>=2.0"]
+# robust biweight detrending (optional alternative to lightkurve's flatten)
+detrend = ["wotan>=1.10"]
+# experiment tracking
+track = ["tensorboard>=2.15"]
+# development tooling
+dev = ["pytest>=8.0", "ruff>=0.4", "pre-commit>=3.6", "ipykernel>=6.29", "jupyterlab>=4.0"]
+all = ["exotransit[boost,detrend,track,dev]"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "NPY"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

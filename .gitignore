@@ -1,0 +1,37 @@
+# environments
+.venv/
+venv/
+__pycache__/
+*.egg-info/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+
+# data and artifacts (large / regenerable) -- keep only the frozen split and label table
+data/*
+!data/.gitkeep
+!data/splits.csv
+!data/labels.parquet
+!data/raw/
+!data/processed/
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+runs/*
+!runs/.gitkeep
+checkpoints/*
+!checkpoints/.gitkeep
+*.pt
+*.pth
+*.npz
+*.fits
+
+# experiment tracking
+wandb/
+mlruns/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

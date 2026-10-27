@@ -1,0 +1,47 @@
+# Single source of truth for paths, seeds and pipeline parameters.
+# Values marked (wk N) are placeholders that get finalized in that week.
+
+seed: 42
+
+paths:
+  data_dir: data
+  raw_lightcurves: data/raw        # per-star cached light curves
+  processed: data/processed        # folded global/local views
+  labels: data/labels.parquet      # TCE table with binary labels (frozen wk 1)
+  splits: data/splits.csv          # star-level train/val/test (frozen wk 1)
+  reports: reports
+
+data:
+  mission: Kepler
+  author: Kepler
+  flux_column: pdcsap_flux         # systematics-corrected flux
+  quality_bitmask: default
+  # label mapping decided in wk 1 against the live NASA Exoplanet Archive TCE table:
+  # planet candidate -> 1; astrophysical false positive / non-transit -> 0; unknown dropped
+  pilot_n_stars: 500
+
+split:
+  by: kepid                        # split by STAR, never by TCE (leakage control)
+  train: 0.8
+  val: 0.1
+  test: 0.1
+  stratify: true
+
+preprocess:                        # (wk 2) AstroNet-style views
+  detrend_window_durations: 3.0    # spline/biweight window in units of transit duration
+  sigma_clip_upper: 5.0
+  global_bins: 2001                # whole phase-folded orbit
+  local_bins: 201                  # zoom on transit
+  local_window_durations: 4.0      # local view spans this many transit durations
+
+bls:                               # (wk 3)
+  min_period_days: 0.5
+  max_period_days: 500.0
+  duration_grid_hours: [1.0, 2.0, 4.0, 6.0, 8.0, 12.0]
+
+train:                             # (wk 4)
+  batch_size: 64
+  epochs: 50
+  lr: 1.0e-3
+  weight_decay: 1.0e-4
+  loss: weighted_bce               # vs. focal / resampling, decided by ablation
