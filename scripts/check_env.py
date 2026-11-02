@@ -12,8 +12,18 @@ import importlib
 import sys
 
 REQUIRED = [
-    "numpy", "scipy", "pandas", "pyarrow", "astropy", "astroquery",
-    "lightkurve", "torch", "sklearn", "matplotlib", "yaml", "tqdm",
+    "numpy",
+    "scipy",
+    "pandas",
+    "pyarrow",
+    "astropy",
+    "astroquery",
+    "lightkurve",
+    "torch",
+    "sklearn",
+    "matplotlib",
+    "yaml",
+    "tqdm",
 ]
 OPTIONAL = ["xgboost", "wotan", "tensorboard", "pytest"]
 
@@ -63,7 +73,7 @@ def check_bls_recovery() -> bool:
     t = np.arange(0, 90, 29.4 / 60 / 24)
     true_period, true_t0, duration, depth = 7.3, 2.1, 0.15, 0.002
     flux = 1 + rng.normal(0, 3e-4, t.size)
-    in_transit = ((t - true_t0 + 0.5 * true_period) % true_period - 0.5 * true_period)
+    in_transit = (t - true_t0 + 0.5 * true_period) % true_period - 0.5 * true_period
     flux[np.abs(in_transit) < duration / 2] -= depth
 
     bls = BoxLeastSquares(t, flux)
@@ -89,8 +99,13 @@ def check_cnn_forward() -> bool:
 
     def branch() -> nn.Sequential:
         return nn.Sequential(
-            nn.Conv1d(1, 8, 5, padding=2), nn.ReLU(), nn.MaxPool1d(2),
-            nn.Conv1d(8, 16, 5, padding=2), nn.ReLU(), nn.AdaptiveAvgPool1d(4), nn.Flatten(),
+            nn.Conv1d(1, 8, 5, padding=2),
+            nn.ReLU(),
+            nn.MaxPool1d(2),
+            nn.Conv1d(8, 16, 5, padding=2),
+            nn.ReLU(),
+            nn.AdaptiveAvgPool1d(4),
+            nn.Flatten(),
         )
 
     gb, lb, head = branch(), branch(), nn.Linear(16 * 4 * 2, 1)

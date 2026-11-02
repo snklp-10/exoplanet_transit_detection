@@ -10,6 +10,7 @@ paths:
   labels: data/labels.parquet      # TCE table with binary labels (frozen wk 1)
   splits: data/splits.csv          # star-level train/val/test (frozen wk 1)
   reports: reports
+  tce_raw: data/raw/tce_dr24_raw.parquet #cache downlaod of the DR24 TCE table
 
 data:
   mission: Kepler
