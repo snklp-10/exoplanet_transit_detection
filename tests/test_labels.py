@@ -54,3 +54,26 @@ def test_unexpected_disposition_raises():
     # make_labels should raise AssertionError (hint: pytest.raises)
     with pytest.raises(AssertionError):
         make_labels(bad)
+
+
+def test_placeholders_become_nan_and_row_is_kept():
+    toy = _toy()
+    toy.loc[0, ["tce_model_snr", "tce_depth", "tce_num_transits"]] = [-1.0, 0.0, 0]
+    labeled, unk = make_labels(toy)
+    assert len(labeled) + len(unk) == len(toy)
+    row = labeled[labeled["kepid"] == 3].iloc[0]
+    assert row["fit_failed"]
+    assert row[["snr", "depth_ppm", "tce_num_transits"]].isna().all()
+
+
+def test_normal_rows_are_not_flagged():
+    labeled, unk = make_labels(_toy())
+    assert not labeled["fit_failed"].any()
+    assert not unk["fit_failed"].any()
+
+
+def test_missing_period_raises():
+    bad = _toy()
+    bad.loc[0, "tce_period"] = float("nan")
+    with pytest.raises(ValueError):
+        make_labels(bad)

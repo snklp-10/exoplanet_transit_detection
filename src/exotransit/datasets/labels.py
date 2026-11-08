@@ -23,6 +23,7 @@ FINAL_COLS = [
     "tce_plnt_num",
     "disposition",
     "label",
+    "fit_failed",
     "period_day",
     "epoch_bkjd",
     "duration_day",
@@ -45,6 +46,12 @@ def make_labels(raw: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     df["disposition"] = df["av_training_set"]
 
     df["duration_day"] = df["tce_duration"] / 24
+
+    df["fit_failed"] = df["tce_model_snr"] < 0
+
+    df["tce_depth"] = df["tce_depth"].where(df["tce_depth"] > 0)
+    df["tce_model_snr"] = df["tce_model_snr"].where(df["tce_model_snr"] >= 0)
+    df["tce_num_transits"] = df["tce_num_transits"].where(df["tce_num_transits"] > 0)
 
     df = df.rename(columns=RENAME)
 
@@ -71,6 +78,12 @@ def make_labels(raw: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
 
 def validate(df: pd.DataFrame) -> None:
     """Sanity checks. Raise AssertionError with a clear message if any fail."""
+
+    for col in ["kepid", "tce_plnt_num", "period_day", "epoch_bkjd", "duration_day"]:
+        n_missing = df[col].isna().sum()
+        if n_missing > 0:
+            raise ValueError(f"{col} has {n_missing} missing values")
+
     for col in ["period_day", "duration_day", "depth_ppm"]:
         bad = (df[col] <= 0).sum()
         if bad > 0:

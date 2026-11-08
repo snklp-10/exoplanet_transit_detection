@@ -11,6 +11,7 @@ paths:
   splits: data/splits.csv          # star-level train/val/test (frozen wk 1)
   reports: reports
   tce_raw: data/raw/tce_dr24_raw.parquet #cache downlaod of the DR24 TCE table
+  tces_unk: data/tces_unk.parquet
 
 data:
   mission: Kepler
