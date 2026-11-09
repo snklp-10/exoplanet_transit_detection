@@ -28,7 +28,7 @@ def resolve(cfg_path: str) -> Path:
 def seed_everything(seed: int = 42, deterministic: bool = True) -> None:
     """Seed python, numpy and torch (if installed) for reproducible runs."""
     random.seed(seed)
-    np.random.seed(seed)
+    np.random.seed(seed)  # noqa: NPY002
     os.environ["PYTHONHASHSEED"] = str(seed)
     try:
         import torch

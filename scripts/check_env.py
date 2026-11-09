@@ -1,4 +1,5 @@
-"""Verify the environment: imports, versions, device, a synthetic BLS recovery, optional archive access.
+"""
+Verify the environment: imports, versions, device, BLS recovery, archive access.
 
 Usage:
     python scripts/check_env.py            # offline checks
@@ -77,7 +78,7 @@ def check_bls_recovery() -> bool:
     flux[np.abs(in_transit) < duration / 2] -= depth
 
     bls = BoxLeastSquares(t, flux)
-    periods = np.linspace(1.0, 20.0, 20000)
+    periods = np.linspace(1.0, 20.0, 20000)  # type: ignore
     res = bls.power(periods, duration)
     best = periods[np.argmax(res.power)]
     ok = abs(best - true_period) / true_period < 0.01
@@ -95,7 +96,7 @@ def check_cnn_forward() -> bool:
 
     cfg = load_config()
     seed_everything(cfg["seed"])
-    g, l = cfg["preprocess"]["global_bins"], cfg["preprocess"]["local_bins"]
+    g, l = cfg["preprocess"]["global_bins"], cfg["preprocess"]["local_bins"]  # noqa: E741
 
     def branch() -> nn.Sequential:
         return nn.Sequential(

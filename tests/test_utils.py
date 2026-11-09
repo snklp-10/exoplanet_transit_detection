@@ -16,7 +16,7 @@ def test_resolve_is_absolute():
 
 def test_seed_everything_is_reproducible():
     seed_everything(123)
-    a = np.random.rand(5)
+    a = np.random.rand(5)  # noqa: NPY002
     seed_everything(123)
-    b = np.random.rand(5)
+    b = np.random.rand(5)  # noqa: NPY002
     assert np.array_equal(a, b)

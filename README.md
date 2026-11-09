@@ -3,7 +3,27 @@
 Classify periodic dips in Kepler light curves as real planet transits or false positives
 (e.g. eclipsing binaries), and measure honestly where a 1D CNN improves on a classical BLS baseline.
 
-> Status: week 1 (environment, data, frozen split). Results sections are filled in as they are produced.
+> Status: week 1 of 6, data and labels. Results sections are filled in as they are produced.
+
+## Progress
+
+- [x] Environment, repo skeleton, config
+- [x] Kepler DR24 TCE table fetched through the NASA Exoplanet Archive TAP service, with a local cache
+- [x] Label table: 15,737 labeled TCEs (PC 3,600, AFP 9,596, NTP 2,541) plus 4,630 unlabeled (UNK) TCEs kept separately
+- [x] Validation checks and unit tests for the labeling step
+- [x] Frozen star-level train/val/test split
+- [ ] Light-curve download and cache
+- [ ] Data manifest and EDA figures
+- [ ] Preprocessing, BLS baseline, 1D CNN (weeks 2 to 6)
+
+## Build the label table
+
+```bash
+python scripts/build_labels.py             # uses the cached table if present
+python scripts/build_labels.py --refresh   # re-download from the archive
+```
+
+Writes `data/labels.parquet` (committed) and `data/tces_unk.parquet` (git-ignored).
 
 ## Setup
 
